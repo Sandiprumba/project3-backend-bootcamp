@@ -1,10 +1,9 @@
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class Video extends Model {
     static associate(models) {
       this.belongsTo(models.user, { foreignKey: "user_id" });
-      this.belongsTo(models.itinerary, { foreignKey: "itinerary_id" });
-      this.hasMany(models.like, { foreignKey: "video_id" });
       this.hasMany(models.comment, { foreignKey: "video_id" });
     }
   }
@@ -13,27 +12,20 @@ module.exports = (sequelize, DataTypes) => {
     {
       title: {
         type: DataTypes.STRING,
-        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
       },
       video_url: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
-      user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "users",
-          key: "id",
-        },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
       },
-      itinerary_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "itineraries",
-          key: "id",
-        },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
       },
     },
     {
@@ -42,5 +34,6 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     }
   );
+
   return Video;
 };

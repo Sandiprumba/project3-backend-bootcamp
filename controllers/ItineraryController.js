@@ -1,7 +1,10 @@
+const { Op } = require("sequelize");
+
 class ItineraryController {
   constructor(model) {
     this.model = model;
   }
+
   get = async (req, res) => {
     try {
       const itineraries = await this.model.findAll();
@@ -11,11 +14,13 @@ class ItineraryController {
       res.json({ error: "internal server error" });
     }
   };
+
   create = async (req, res) => {
     try {
       const {
-        name,
+        title,
         description,
+        itineraries,
         duration,
         difficulty,
         region,
@@ -24,8 +29,9 @@ class ItineraryController {
         image_url,
       } = req.body;
       const newItinerary = await this.model.create({
-        name,
+        title,
         description,
+        itineraries,
         duration,
         difficulty,
         region,
@@ -33,7 +39,7 @@ class ItineraryController {
         cost,
         image_url,
       });
-      res.status(201).json({
+      res.json({
         itinerary: newItinerary,
         message: "itinerary created successfully",
       });
@@ -42,25 +48,30 @@ class ItineraryController {
       res.json({ error: "internal server error" });
     }
   };
+
   getById = async (req, res) => {
     try {
-      const { id } = req.params;
+      const id = req.params.id;
       const itinerary = await this.model.findByPk(id);
       if (!itinerary) {
-        return res.status(404).json({ error: "itinerary not found" });
+        return res.json({ error: "itinerary not found" });
       }
+      const days = itinerary.itineraries.split(",");
+      itinerary.itineraries = days;
       res.json({ itinerary, message: "success" });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "internal server error" });
+      res.json({ error: "internal server error" });
     }
   };
+
   update = async (req, res) => {
     try {
-      const { id } = req.params;
+      const id = req.params.id;
       const {
-        name,
+        title,
         description,
+        itineraries,
         duration,
         difficulty,
         region,
@@ -70,11 +81,12 @@ class ItineraryController {
       } = req.body;
       const itinerary = await this.model.findByPk(id);
       if (!itinerary) {
-        return res.status(404).json({ error: "itinerary not found" });
+        return res.json({ error: "itinerary not found" });
       }
       await itinerary.update({
-        name,
+        title,
         description,
+        itineraries,
         duration,
         difficulty,
         region,
@@ -82,25 +94,51 @@ class ItineraryController {
         cost,
         image_url,
       });
-      res.json({ itinerary, message: "itinerary updated succesfully" });
+      res.json({ itinerary, message: "itinerary updated successfully" });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "internal server error" });
+      res.json({ error: "internal server error" });
     }
   };
+
   delete = async (req, res) => {
     try {
-      const { id } = req.params;
+      const id = req.params.id;
       const itinerary = await this.model.findByPk(id);
       if (!itinerary) {
-        return res.status(400).json({ error: "itinerary not found" });
+        return res.json({ error: "itinerary not found" });
       }
       await itinerary.destroy();
       res.json({ message: "itinerary deleted successfully" });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "internal server error" });
+      res.json({ error: "internal server error" });
+    }
+  };
+
+  search = async (req, res) => {
+    try {
+      const query = req.params.query;
+      let itineraries;
+      console.log(query);
+      console.log(itineraries);
+      itineraries = await this.model.findAll({
+        where: {
+          title: {
+            [Op.iLike]: `%${query}%`,
+          },
+        },
+      });
+
+      if (itineraries.length === 0) {
+        return res.json({ message: "no itineraries found" });
+      }
+      res.json({ itineraries, message: "success" });
+    } catch (error) {
+      console.log(error);
+      res.json({ error: "internal server error" });
     }
   };
 }
+
 module.exports = ItineraryController;

@@ -17,6 +17,9 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       title: {
+        type: Sequelize.STRING,
+      },
+      description: {
         type: Sequelize.TEXT,
       },
       video_url: {
@@ -26,16 +29,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: "users",
-          key: "id",
-        },
-      },
-      description: {
-        type: Sequelize.TEXT,
-      },
-      itinerary_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "itineraries",
           key: "id",
         },
       },

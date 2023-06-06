@@ -8,3 +8,12 @@ module.exports = {
     dialect: process.env.DIALECT,
   },
 };
+//   sequelize
+//   .authenticate()
+//   .then(()=> {
+//     console.log('connection has been established');
+//   })
+//   .catch((error)=> {
+//     console.log('unable to connect', error);
+//   });
+// module.exports ={sequelize};

@@ -16,7 +16,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
+      title: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -24,8 +24,12 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      itineraries: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
       duration: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       difficulty: {
@@ -37,12 +41,12 @@ module.exports = {
         allowNull: false,
       },
       altitude: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       cost: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        defaultValue: 0,
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -53,7 +57,7 @@ module.exports = {
       },
       image_url: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,

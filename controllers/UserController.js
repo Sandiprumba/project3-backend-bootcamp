@@ -2,76 +2,91 @@ class UserController {
   constructor(model) {
     this.model = model;
   }
+
   get = async (req, res) => {
     try {
-      const users = await this.model.findAll();
-      res.json({ users, message: "success" });
+      const user = await this.model.findAll();
+      res.json({ user, message: "success" });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "internal server error" });
+      console.error(error);
+      res.json(error);
     }
   };
-  create = async (req, res) => {
+
+  getByEmail = async (req, res) => {
     try {
-      const { username, email, profilePicture, bio } = req.body;
-      const newUser = await this.model.create({
-        username,
-        email,
-        profilePicture,
-        bio,
-      });
-      res
-        .status(201)
-        .json({ user: newUser, message: "user created successfull" });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "internal server error" });
-    }
-  };
-  getById = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const user = await this.model.findByPk(id);
+      const email = req.params.email;
+      console.log(email);
+      const user = await this.model.findOne({ where: { email } });
       if (!user) {
-        return res.status(404).json({ error: "user not found" });
+        return res.json({ error: "User not found" });
       }
       res.json({ user, message: "success" });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "internal server error" });
+      console.error(error);
+      res.json(error);
     }
   };
-  update = async (req, res) => {
+
+  create = async (req, res) => {
+    const { email, username, bio, profile_picture } = req.body;
     try {
-      const { id } = req.params;
-      const { username, email, profilePicture, bio } = req.body;
-      const user = await this.model.findByPk(id);
-      if (!user) {
-        return res.status(404).json({ error: "user not found" });
+      const existingUser = await this.model.findOne({ where: { email } });
+      if (existingUser) {
+        return res.json({ message: "A user with this email already exists" });
       }
-      user.username = username;
-      user.email = email;
-      user.profilePicture = profilePicture;
-      user.bio = bio;
-      res.json({ user, message: "user updated successfully" });
+      const newUser = await this.model.create({
+        email,
+        username,
+        bio,
+        profile_picture,
+      });
+      res.json({ user: newUser, message: "User created successfully" });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "internal server error" });
+      console.error(error);
+      res.json(error);
     }
   };
-  delete = async (req, res) => {
+
+  update = async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    const { email, username, bio, profile_picture } = req.body;
+    console.log(email, username, bio, profile_picture);
     try {
-      const { id } = req.params;
       const user = await this.model.findByPk(id);
       if (!user) {
-        return res.status(404).json({ error: "user not found" });
+        return res.json({ error: "User not found" });
+      }
+      const existingUser = await this.model.findOne({
+        where: { email: email },
+      });
+      if (existingUser && existingUser.id !== id) {
+        await user.update({ email, username, bio, profile_picture });
+        return res.json({ message: "user updated success" });
+      }
+      await user.update({ email, username, bio, profile_picture });
+      res.json({ user, message: "User updated successfully" });
+    } catch (error) {
+      console.error(error);
+      res.json(error);
+    }
+  };
+
+  delete = async (req, res) => {
+    const id = req.params.id;
+    try {
+      const user = await this.model.findByPk(id);
+      if (!user) {
+        return res.json({ error: "User not found" });
       }
       await user.destroy();
-      res.json({ message: "user deleted successfully" });
+      res.json({ message: "User deleted successfully" });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "internal server error" });
+      console.error(error);
+      res.json(error);
     }
   };
 }
+
 module.exports = UserController;

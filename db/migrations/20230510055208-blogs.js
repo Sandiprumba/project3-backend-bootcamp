@@ -20,8 +20,8 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      content: {
-        type: Sequelize.STRING,
+      description: {
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       user_id: {
@@ -33,7 +33,7 @@ module.exports = {
       },
       image_url: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,

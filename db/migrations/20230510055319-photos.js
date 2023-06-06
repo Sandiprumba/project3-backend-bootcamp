@@ -16,9 +16,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      title: {
+        type: Sequelize.STRING,
+      },
+      description: {
+        type: Sequelize.TEXT,
+      },
       image_url: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -29,11 +35,11 @@ module.exports = {
       },
       created_at: {
         type: Sequelize.DATE,
-        defaultValue: new Date(),
+        allowNull: false,
       },
       updated_at: {
         type: Sequelize.DATE,
-        defaultValue: new Date(),
+        allowNull: false,
       },
     });
   },

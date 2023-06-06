@@ -26,19 +26,43 @@ module.exports = {
       },
       itinerary_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "itineraries",
           key: "id",
         },
       },
+      photo_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "photos",
+          key: "id",
+        },
+        allowNull: true,
+      },
+      video_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "videos",
+          key: "id",
+        },
+        allowNull: true,
+      },
+      blog_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "blogs",
+          key: "id",
+        },
+        allowNull: true,
+      },
       created_at: {
         type: Sequelize.DATE,
-        allowNull: false,
+        defaultValue: new Date(),
       },
       updated_at: {
         type: Sequelize.DATE,
-        allowNull: false,
+        defaultValue: new Date(),
       },
     });
   },

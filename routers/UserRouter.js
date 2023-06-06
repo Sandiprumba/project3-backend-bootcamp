@@ -3,15 +3,18 @@ class UserRouter {
     this.controller = userController;
     this.express = express;
   }
-  route = () => {
-    const router = this.express.Router();
+
+  route() {
+    let router = this.express.Router();
 
     router.get("/", this.controller.get);
-    router.post("/", this.controller.create);
-    router.get("/:id", this.controller.getById);
+    router.get("/:email", this.controller.getByEmail);
+    router.post("/:email", this.controller.create);
     router.put("/:id", this.controller.update);
     router.delete("/:id", this.controller.delete);
+
     return router;
-  };
+  }
 }
+
 module.exports = UserRouter;

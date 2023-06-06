@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       rating: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       user_id: {
         type: DataTypes.INTEGER,
@@ -27,6 +27,14 @@ module.exports = (sequelize, DataTypes) => {
           model: "itineraries",
           key: "id",
         },
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        field: new Date(),
       },
     },
     {

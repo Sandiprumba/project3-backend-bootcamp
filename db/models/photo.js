@@ -1,34 +1,33 @@
+"use strict";
+
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class Photo extends Model {
     static associate(models) {
       this.belongsTo(models.user, { foreignKey: "user_id" });
-      this.belongsTo(models.itinerary, { foreignKey: "itinerary_id" });
-      this.hasMany(models.like, { foreignKey: "photo_id" });
-      this.hasMany(models.comment, { foreignKey: "photo_id" });
     }
   }
+
   Photo.init(
     {
+      title: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.TEXT,
+      },
       image_url: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
-      user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "users",
-          key: "id",
-        },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
       },
-      itinerary_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "itineraries",
-          key: "id",
-        },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: new Date(),
       },
     },
     {
@@ -37,5 +36,6 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     }
   );
+
   return Photo;
 };

@@ -1,4 +1,4 @@
-"use strict";
+("use strict");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -9,16 +9,36 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable("ratings", {
+    await queryInterface.createTable("comments", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
-      rating: {
-        type: Sequelize.INTEGER,
+      remark: {
+        type: Sequelize.STRING,
         allowNull: false,
+      },
+      star_rating: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      photo_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "photos",
+          key: "id",
+        },
+        allowNull: true,
+      },
+      video_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "videos",
+          key: "id",
+        },
+        allowNull: true,
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -33,6 +53,7 @@ module.exports = {
           model: "itineraries",
           key: "id",
         },
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -52,6 +73,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable("ratings");
+    await queryInterface.dropTable("comments");
   },
 };
